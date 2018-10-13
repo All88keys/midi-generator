@@ -20,8 +20,8 @@ fs.noteoff(0, 60)
 fs.noteoff(0, 67)
 fs.noteoff(0, 76)
 
-def playMidi(note,duration):
-    fs.noteon(0,note,100) #velocity should change eventually.
+def playMidi(note,duration,velocity):
+    fs.noteon(0,note,velocity) #velocity should change based on the genre of the music.
     time.sleep(duration)
     fs.noteoff(0,note)
 
