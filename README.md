@@ -4,7 +4,7 @@ They say music effects the way you feel, but what if you could have the *way you
 Well today, ladies and gentlemen, we have done just that! Using facial recognition technology and the powers of artifical intelligence, make facial expressions at the camera to effect the tempo, pitch, and **prodecural generation** of music!
 
 ## Facial Recognition
-This project uses OpenCV to detect faces and determines their emotions using the models under models. Frames are streamed from a Raspberry Pi camera continuously, allowing emotions to be determined in real-time. Once an emotion is determined, it is sent to the music generator to change to that genre of music.
+This project uses OpenCV to detect faces and determines their emotions using the models under `models/`. Frames are streamed from a Raspberry Pi camera continuously, allowing emotions to be determined in real-time. Once an emotion is determined, it is sent to the music generator to change to that genre of music.
 
 
 ## Markov Chain Music
