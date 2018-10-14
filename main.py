@@ -57,17 +57,17 @@ def read_from(read_from_name):
 #write_to("disgusted","Mountain",2)
 #write_to("surprised", "testriver", 0)
 
-neutral = { #DONE
+neutral = {
     'name': 'neutral',
-    'file': "midis/neutral.mid", #will end up being some normal, happy sounds.
-    'track': 1,#Main Piano Tracks
+    'file': "midis/neutral.mid",
+    'track': 1, #Main Piano Tracks
     'tempo': 400,
     'velocity': 60,
     'note': read_from("neutral")
 }
 #neutral.update({"note":markov2(neutral['file'],neutra` l['track'],lambda x: math.pow(x,1/4))})
 
-happy = { #DONE
+happy = {
     'name': 'happy',
     'file': "midis/Bach.mid",
     'track': 1, #Lead piano/singer
@@ -77,7 +77,7 @@ happy = { #DONE
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-sad = { #DONE
+sad = { 
     'name': 'sad',
     'file': "midis/Moon.mid",
     'track': 1,#Piano
@@ -87,17 +87,17 @@ sad = { #DONE
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-angry = { #DONE
+angry = { 
     'name': 'angry',
     'file': "midis/Elvis.mid",
     'track': 1, #Voice Line
-    'tempo': 150,
+    'tempo': 200,
     'velocity': 127,
     'note': read_from("angry")
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-disgusted = { #DONE
+disgusted = { 
     'name': 'disgusted',
     'file': "midis/Mountain.mid", #will end up being some deeper noises.
     'track': 2, #Bass line
@@ -109,7 +109,7 @@ disgusted = { #DONE
 
 surprised = {
     'name': 'surprised',
-    'file': "midis/Bach.mid", #will end up being some relatively high pitch
+    'file': "midis/Bach.mid", 
     'track': 1,
     'tempo': 150,
     'velocity': 60,
