@@ -4,6 +4,8 @@ from functools import reduce
 import random
 import math
 import numpy as np
+import os
+
 # create second order markov chain
 def markov2(midi_file, track, reducer_function):
     mid = mido.MidiFile(midi_file)
@@ -47,7 +49,7 @@ happy = {
     'tempo': 250
 }
 happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
-print(happy['note'])
+
 sad = {
     'name': 'sad',
     'file': "midis/Moon.mid",
@@ -71,9 +73,34 @@ disgust = {
     'tempo': 250
 }
 disgust.update({"note":markov2(disgust['file'],disgust['track'],lambda x: math.pow(x,1/8))})
-emotions = [happy,sad,angry,disgust]
 
-jacobs_emotion = angry
+neutral = {
+    'name': 'disgust',
+    'file': "midis/Bach.mid", #will end up being some normal shit
+    'track': 1,
+    'tempo': 250
+}
+neutral.update({"note":markov2(neutral['file'],neutral['track'],lambda x: math.pow(x,1/8))})
+
+surprised = {
+    'name': 'disgust',
+    'file': "midis/Bach.mid", #will end up being some spooky shit
+    'track': 1,
+    'tempo': 250
+}
+surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: math.pow(x,1/8))})
+
+
+emotions = [happy, sad, angry, disgust, neutral, surprised]
+emotion_strings = ['happy', 'sad', 'angry', 'disgust', 'neutral', 'surprised']
+
+if os.environ["EMOTION"] is None:
+    os.environ["EMOTION"] = "angry"
+
+
+def get_emotion():
+    return emotions[emotion_strings.index(os.environ["EMOTION"])]
+
 
 #play function
 def play(markov_chain, note_duration, length, emotion_name):
@@ -100,14 +127,20 @@ def play(markov_chain, note_duration, length, emotion_name):
             return
 
 
+last_emotion = "sad"
+
+
 def emotion_changed():
-    global jacobs_emotion
-    jacobs_emotion = emotions[random.randint(0, len(emotions) - 1)]
-    return random.randint(1, 40) == 1   # if emotion_name != whatever jacob gives us
+    global last_emotion
+    change = False
+    if last_emotion != os.environ["EMOTION"]:
+        change = True
+    last_emotion = os.environ["EMOTION"]
+    return change
 
 
 while True:
-    emotion = jacobs_emotion
+    emotion = get_emotion()
     print(emotion["name"])
     play(emotion["note"], emotion["tempo"], 1000, emotion["name"])
 
