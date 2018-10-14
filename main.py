@@ -66,13 +66,13 @@ angry = {
 }
 angry.update({"note":markov2(angry['file'],angry['track'],lambda x: math.pow(x,1/8))})
 
-disgust = {
-    'name': 'disgust',
+disgusted = {
+    'name': 'disgusted',
     'file': "midis/Bach.mid", #will end up being some low shit
     'track': 1,
     'tempo': 250
 }
-disgust.update({"note":markov2(disgust['file'],disgust['track'],lambda x: math.pow(x,1/8))})
+disgusted.update({"note":markov2(disgusted['file'],disgusted['track'],lambda x: math.pow(x,1/8))})
 
 neutral = {
     'name': 'neutral',
@@ -83,7 +83,7 @@ neutral = {
 neutral.update({"note":markov2(neutral['file'],neutral['track'],lambda x: math.pow(x,1/8))})
 
 surprised = {
-    'name': 'surprisec',
+    'name': 'surprised',
     'file': "midis/Bach.mid", #will end up being some spooky shit
     'track': 1,
     'tempo': 250
@@ -91,8 +91,8 @@ surprised = {
 surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: math.pow(x,1/8))})
 
 
-emotions = [happy, sad, angry, disgust, neutral, surprised]
-emotion_strings = ['happy', 'sadness', 'angry', 'disgust', 'neutral', 'surprised']
+emotions = [happy, sad, angry, disgusted, neutral, surprised]
+emotion_strings = ['happy', 'sad', 'angry', 'disgusted', 'neutral', 'surprised']
 
 
 def get_emotion():
@@ -124,7 +124,7 @@ def play(markov_chain, note_duration, length, emotion_name):
             return
 
 
-last_emotion = "sadness"
+last_emotion = "sad"
 
 
 def emotion_changed():
