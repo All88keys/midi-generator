@@ -1,10 +1,7 @@
+import mido,random,math,os
 from playMusic import playMidi
-import mido
 from functools import reduce
-import random
-import math
 import numpy as np
-import os
 
 # create second order markov chain
 def markov2(midi_file, track, reducer_function):
@@ -41,9 +38,8 @@ def markov2(midi_file, track, reducer_function):
                     notes[x][y][z] = (next_next_note_prob / total)
 
     return notes
-#TODO: Hardcode the markov2 function
 
-#writes markov chain to .dat.npy
+#writes markov chain 2 to .dat.npy
 def write_to(write_to_name, midi_path, track):
     notes = markov2("midis/" + midi_path + ".mid", track, lambda x: math.pow(x, 1/4))
     filename = "frequencies/" + write_to_name + ".dat.npy"
@@ -58,60 +54,63 @@ def read_from(read_from_name):
 #write_to("sad", "Moon", 1)
 #write_to("angry", "Elvis", 1)
 
-
-
 happy = {
     'name': 'happy',
     'file': "midis/Bach.mid",
     'track': 1,
-    'tempo': 250
+    'tempo': 250,
+    'note': read_from("happy")
 }
-happy.update({"note":read_from("happy")})
+#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-sad = {
+sad = { #DONE
     'name': 'sad',
     'file': "midis/Moon.mid",
     'track': 1,
-    'tempo': 400
+    'tempo': 400,
+    'note': read_from("sad")
 }
-sad.update({"note":read_from("sad")})
+#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-angry = {
+angry = { #DONE
     'name': 'angry',
     'file': "midis/Elvis.mid",
     'track': 1,
-    'tempo': 150
+    'tempo': 150,
+    'note': read_from("angry")
 }
-angry.update({"note":read_from("angry")})
+#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-disgusted = {
+disgusted = { #TODO: Ratio with lots of low notes.
     'name': 'disgusted',
-    'file': "midis/Bach.mid", #will end up being some low shit
+    'file': "midis/Bach.mid", #will end up being some deeper noises.
     'track': 1,
-    'tempo': 250
+    'tempo': 250,
+    'note': read_from("happy")
 }
-disgusted.update({"note":read_from("happy")})
+#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-neutral = {
+neutral = { #TODO: Normal (?)
     'name': 'neutral',
-    'file': "midis/Bach.mid", #will end up being some normal shit
+    'file': "midis/Bach.mid", #will end up being some normal, happy sounds.
     'track': 1,
-    'tempo': 250
+    'tempo': 250,
+    'note': read_from("happy")
 }
-neutral.update({"note":read_from("happy")})
+#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
 surprised = {
     'name': 'surprised',
-    'file': "midis/Bach.mid", #will end up being some spooky shit
+    'file': "midis/Bach.mid", #will end up being some relatively high pitch
     'track': 1,
-    'tempo': 250
+    'tempo': 250,
+    'note': read_from("happy")
 }
-surprised.update({"note":read_from("happy")})
+#surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: math.pow(x,1/4))})
 
 
 emotions = [happy, sad, angry, disgusted, neutral, surprised]
 emotion_strings = ['happy', 'sad', 'angry', 'disgusted', 'neutral', 'surprised']
-
 
 def get_emotion():
     return emotions[emotion_strings.index(str(open(os.path.expanduser("~/.emotion"), "r").read()))]

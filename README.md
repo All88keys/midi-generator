@@ -1,2 +1,1 @@
 # midi-generator
-generates midi
