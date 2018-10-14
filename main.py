@@ -46,7 +46,7 @@ happy = {
     'track': 1,
     'tempo': 250
 }
-happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/8))})
+happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 print(happy['note'])
 sad = {
     'name': 'sad',
@@ -73,40 +73,41 @@ disgust = {
 disgust.update({"note":markov2(disgust['file'],disgust['track'],lambda x: math.pow(x,1/8))})
 emotions = [happy,sad,angry,disgust]
 
-first_emotion = happy
-
-def get_emotion(emotion):
-    if random.randint(1,10) == 5:
-        print("change!")
-        return emotions[random.randint(0,4)]
-    else:
-        return emotion
-
+jacobs_emotion = angry
 
 #play function
-def play(emotion,markov_chain, note_duration, length):
-    newEmotion = emotion
+def play(markov_chain, note_duration, length, emotion_name):
     # finds two valid starting notes
     currentNote1 = random.randint(0, 127)
     currentNote2 = random.randint(0, 127)
-    #timeout = 0
+    timeout = 0
     while reduce((lambda x, y: x + y), markov_chain[currentNote1][currentNote2]) == 0:
         currentNote1 = random.randint(0, 127)
         currentNote2 = random.randint(0, 127)
-        #timeout += 1
-        # if (timeout == 2000):
-        #     print("Empty markov chain")
-        #     return
-    while emotion == newEmotion:
-        print(emotion['name'])
+        timeout += 1
+        if timeout == 10000:
+            print("Empty markov chain")
+            return
+
+
+    for i in range(length):
         playMidi(currentNote2, note_duration / 1000, 100)
-        #print(currentNote2)
+        print(currentNote2)
         temp = np.random.choice(128, 1, p=markov_chain[currentNote1][currentNote2])
         currentNote1 = currentNote2
         currentNote2 = int(temp)
-        newEmotion = get_emotion(emotion)
-    play(newEmotion,newEmotion["note"], newEmotion["tempo"], 1000)
+        if emotion_changed():
+            return
 
-#notes = markov2('midis/Moon.mid', 1, (lambda x: math.pow(x, 1/4)))
 
-play(first_emotion,first_emotion["note"], first_emotion["tempo"], 1000)
+def emotion_changed():
+    global jacobs_emotion
+    jacobs_emotion = emotions[random.randint(0, len(emotions) - 1)]
+    return random.randint(1, 40) == 1   # if emotion_name != whatever jacob gives us
+
+
+while True:
+    emotion = jacobs_emotion
+    print(emotion["name"])
+    play(emotion["note"], emotion["tempo"], 1000, emotion["name"])
+
