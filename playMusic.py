@@ -7,7 +7,7 @@ fs.program_select(0, sfid, 0, 0)
 
 note_ons =[]
 
-Main_track = mido.MidiFile('Bach.mid')
+Main_track = mido.MidiFile('midis/Bach.mid')
 
 
 fs.noteon(0, 67, 127)
