@@ -53,12 +53,26 @@ def read_from(read_from_name):
 #write_to("happy", "Bach", 1)
 #write_to("sad", "Moon", 1)
 #write_to("angry", "Elvis", 1)
+#write_to("neutral", "WetMice", 1)
+#write_to("disgusted","Mountain",2)
+#write_to("surprised", "testriver", 0)
 
-happy = {
+neutral = { #DONE
+    'name': 'neutral',
+    'file': "midis/neutral.mid", #will end up being some normal, happy sounds.
+    'track': 1,#Main Piano Tracks
+    'tempo': 400,
+    'velocity': 60,
+    'note': read_from("neutral")
+}
+#neutral.update({"note":markov2(neutral['file'],neutra` l['track'],lambda x: math.pow(x,1/4))})
+
+happy = { #DONE
     'name': 'happy',
     'file': "midis/Bach.mid",
-    'track': 1,
+    'track': 1, #Lead piano/singer
     'tempo': 250,
+    'velocity': 70,
     'note': read_from("happy")
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
@@ -66,8 +80,9 @@ happy = {
 sad = { #DONE
     'name': 'sad',
     'file': "midis/Moon.mid",
-    'track': 1,
+    'track': 1,#Piano
     'tempo': 400,
+    'velocity': 60,
     'note': read_from("sad")
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
@@ -75,27 +90,20 @@ sad = { #DONE
 angry = { #DONE
     'name': 'angry',
     'file': "midis/Elvis.mid",
-    'track': 1,
+    'track': 1, #Voice Line
     'tempo': 150,
+    'velocity': 127,
     'note': read_from("angry")
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
-disgusted = { #TODO: Ratio with lots of low notes.
+disgusted = { #DONE
     'name': 'disgusted',
-    'file': "midis/Bach.mid", #will end up being some deeper noises.
-    'track': 1,
+    'file': "midis/Mountain.mid", #will end up being some deeper noises.
+    'track': 2, #Bass line
     'tempo': 250,
-    'note': read_from("happy")
-}
-#happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
-
-neutral = { #TODO: Normal (?)
-    'name': 'neutral',
-    'file': "midis/Bach.mid", #will end up being some normal, happy sounds.
-    'track': 1,
-    'tempo': 250,
-    'note': read_from("happy")
+    'velocity': 90,
+    'note': read_from("disgusted")
 }
 #happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
 
@@ -103,8 +111,9 @@ surprised = {
     'name': 'surprised',
     'file': "midis/Bach.mid", #will end up being some relatively high pitch
     'track': 1,
-    'tempo': 250,
-    'note': read_from("happy")
+    'tempo': 150,
+    'velocity': 60,
+    'note': read_from("surprised")
 }
 #surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: math.pow(x,1/4))})
 
@@ -117,7 +126,7 @@ def get_emotion():
 
 
 #play function
-def play(markov_chain, note_duration, length, emotion_name):
+def play(markov_chain, note_duration, length, velocity, emotion_name):
     # finds two valid starting notes
     currentNote1 = random.randint(0, 127)
     currentNote2 = random.randint(0, 127)
@@ -132,7 +141,11 @@ def play(markov_chain, note_duration, length, emotion_name):
 
 
     for i in range(length):
-        playMidi(currentNote2, note_duration / 1000, 100)
+        if emotion_name == "surprised":
+            playMidi(currentNote2, random.choice([150,150,150,300]) / 1000, random.choice([60, 60, 60, 127]))
+        else:
+            playMidi(currentNote2, note_duration / 1000, velocity)
+
         print(currentNote2)
         temp = np.random.choice(128, 1, p=markov_chain[currentNote1][currentNote2])
         currentNote1 = currentNote2
@@ -156,5 +169,5 @@ def emotion_changed():
 while True:
     emotion = get_emotion()
     print(emotion["name"])
-    play(emotion["note"], emotion["tempo"], 1000, emotion["name"])
+    play(emotion["note"], emotion["tempo"], 1000, emotion["velocity"], emotion["name"])
 
