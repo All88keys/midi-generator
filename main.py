@@ -96,7 +96,7 @@ emotion_strings = ['happy', 'sadness', 'angry', 'disgust', 'neutral', 'surprised
 
 
 def get_emotion():
-    return emotions[emotion_strings.index(os.getenv('EMOTION', 'neutral'))]
+    return emotions[emotion_strings.index(str(open(os.path.expanduser("~/.emotion"), "r").read()))]
 
 
 #play function
@@ -130,9 +130,9 @@ last_emotion = "sadness"
 def emotion_changed():
     global last_emotion
     change = False
-    if last_emotion != os.getenv('EMOTION', 'neutral'):
+    if last_emotion != str(open(os.path.expanduser("~/.emotion"), "r").read()):
         change = True
-    last_emotion = os.getenv('EMOTION', 'neutral')
+    last_emotion = str(open(os.path.expanduser("~/.emotion"), "r").read())
     return change
 
 
