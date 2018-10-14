@@ -1,7 +1,10 @@
-import mido,fluidsynth,time
+import mido,fluidsynth,time,platform
 #install msgpack as a dependency too.
 fs = fluidsynth.Synth()
-fs.start('coreaudio')
+if platform.system() == 'Darwin':
+    fs.start('coreaudio')
+else:
+    fs.start('alsa')
 sfid = fs.sfload("soundfonts/Keys.sf2")
 fs.program_select(0, sfid, 0, 0)
 

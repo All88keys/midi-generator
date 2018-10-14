@@ -75,7 +75,7 @@ disgust = {
 disgust.update({"note":markov2(disgust['file'],disgust['track'],lambda x: math.pow(x,1/8))})
 
 neutral = {
-    'name': 'disgust',
+    'name': 'neutral',
     'file': "midis/Bach.mid", #will end up being some normal shit
     'track': 1,
     'tempo': 250
@@ -83,7 +83,7 @@ neutral = {
 neutral.update({"note":markov2(neutral['file'],neutral['track'],lambda x: math.pow(x,1/8))})
 
 surprised = {
-    'name': 'disgust',
+    'name': 'surprisec',
     'file': "midis/Bach.mid", #will end up being some spooky shit
     'track': 1,
     'tempo': 250
@@ -92,14 +92,11 @@ surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: 
 
 
 emotions = [happy, sad, angry, disgust, neutral, surprised]
-emotion_strings = ['happy', 'sad', 'angry', 'disgust', 'neutral', 'surprised']
-
-if os.environ["EMOTION"] is None:
-    os.environ["EMOTION"] = "angry"
+emotion_strings = ['happy', 'sadness', 'angry', 'disgust', 'neutral', 'surprised']
 
 
 def get_emotion():
-    return emotions[emotion_strings.index(os.environ["EMOTION"])]
+    return emotions[emotion_strings.index(os.getenv('EMOTION', 'neutral'))]
 
 
 #play function
@@ -127,15 +124,15 @@ def play(markov_chain, note_duration, length, emotion_name):
             return
 
 
-last_emotion = "sad"
+last_emotion = "sadness"
 
 
 def emotion_changed():
     global last_emotion
     change = False
-    if last_emotion != os.environ["EMOTION"]:
+    if last_emotion != os.getenv('EMOTION', 'neutral'):
         change = True
-    last_emotion = os.environ["EMOTION"]
+    last_emotion = os.getenv('EMOTION', 'neutral')
     return change
 
 
