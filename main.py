@@ -4,7 +4,6 @@ from functools import reduce
 import random
 import math
 import numpy as np
-
 # create second order markov chain
 def markov2(midi_file, track, reducer_function):
     mid = mido.MidiFile(midi_file)
@@ -40,29 +39,74 @@ def markov2(midi_file, track, reducer_function):
                     notes[x][y][z] = (next_next_note_prob / total)
 
     return notes
+#TODO: Hardcode the markov2 function
+happy = {
+    'name': 'happy',
+    'file': "midis/Bach.mid",
+    'track': 1,
+    'tempo': 250
+}
+happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/8))})
+print(happy['note'])
+sad = {
+    'name': 'sad',
+    'file': "midis/Moon.mid",
+    'track': 1,
+    'tempo': 400
+}
+sad.update({"note":markov2(sad['file'],sad['track'],lambda x: math.pow(x,1/8))})
+
+angry = {
+    'name': 'angry',
+    'file': "midis/Elvis.mid",
+    'track': 1,
+    'tempo': 150
+}
+angry.update({"note":markov2(angry['file'],angry['track'],lambda x: math.pow(x,1/8))})
+
+disgust = {
+    'name': 'disgust',
+    'file': "midis/Bach.mid", #will end up being some low shit
+    'track': 1,
+    'tempo': 250
+}
+disgust.update({"note":markov2(disgust['file'],disgust['track'],lambda x: math.pow(x,1/8))})
+emotions = [happy,sad,angry,disgust]
+
+first_emotion = happy
+
+def get_emotion(emotion):
+    if random.randint(1,10) == 5:
+        print("change!")
+        return emotions[random.randint(0,4)]
+    else:
+        return emotion
+
 
 #play function
-def play(markov_chain, note_duration, length):
-    # TODO: make the second note less random
+def play(emotion,markov_chain, note_duration, length):
+    newEmotion = emotion
     # finds two valid starting notes
     currentNote1 = random.randint(0, 127)
     currentNote2 = random.randint(0, 127)
-    timeout = 0
+    #timeout = 0
     while reduce((lambda x, y: x + y), markov_chain[currentNote1][currentNote2]) == 0:
         currentNote1 = random.randint(0, 127)
         currentNote2 = random.randint(0, 127)
-        timeout += 1
-        if (timeout == 2000):
-            print("Empty markov chain")
-            return
-
-    for x in range(length):
+        #timeout += 1
+        # if (timeout == 2000):
+        #     print("Empty markov chain")
+        #     return
+    while emotion == newEmotion:
+        print(emotion['name'])
         playMidi(currentNote2, note_duration / 1000, 100)
-        print(currentNote2)
+        #print(currentNote2)
         temp = np.random.choice(128, 1, p=markov_chain[currentNote1][currentNote2])
         currentNote1 = currentNote2
         currentNote2 = int(temp)
+        newEmotion = get_emotion(emotion)
+    play(newEmotion,newEmotion["note"], newEmotion["tempo"], 1000)
 
-notes = markov2('midis/Bach.mid', 1, (lambda x: math.pow(x, 1 / 8)))
+#notes = markov2('midis/Moon.mid', 1, (lambda x: math.pow(x, 1/4)))
 
-play(notes, 250, 1000)
+play(first_emotion,first_emotion["note"], first_emotion["tempo"], 1000)

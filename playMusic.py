@@ -2,7 +2,7 @@ import mido,fluidsynth,time
 #install msgpack as a dependency too.
 fs = fluidsynth.Synth()
 fs.start('coreaudio')
-sfid = fs.sfload("Keys.sf2")
+sfid = fs.sfload("soundfonts/Keys.sf2")
 fs.program_select(0, sfid, 0, 0)
 
 note_ons =[]
