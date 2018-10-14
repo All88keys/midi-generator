@@ -42,13 +42,31 @@ def markov2(midi_file, track, reducer_function):
 
     return notes
 #TODO: Hardcode the markov2 function
+
+#writes markov chain to .dat.npy
+def write_to(write_to_name, midi_path, track):
+    notes = markov2("midis/" + midi_path + ".mid", track, lambda x: math.pow(x, 1/4))
+    filename = "frequencies/" + write_to_name + ".dat.npy"
+    np.save(filename, np.array(notes))
+
+#reads from .dat.npy, returns 3x3 frequency list
+def read_from(read_from_name):
+    filename = "frequencies/" + read_from_name + ".dat.npy"
+    return np.load(filename).tolist()
+
+#write_to("happy", "Bach", 1)
+#write_to("sad", "Moon", 1)
+#write_to("angry", "Elvis", 1)
+
+
+
 happy = {
     'name': 'happy',
     'file': "midis/Bach.mid",
     'track': 1,
     'tempo': 250
 }
-happy.update({"note":markov2(happy['file'],happy['track'],lambda x: math.pow(x,1/4))})
+happy.update({"note":read_from("happy")})
 
 sad = {
     'name': 'sad',
@@ -56,7 +74,7 @@ sad = {
     'track': 1,
     'tempo': 400
 }
-sad.update({"note":markov2(sad['file'],sad['track'],lambda x: math.pow(x,1/8))})
+sad.update({"note":read_from("sad")})
 
 angry = {
     'name': 'angry',
@@ -64,7 +82,7 @@ angry = {
     'track': 1,
     'tempo': 150
 }
-angry.update({"note":markov2(angry['file'],angry['track'],lambda x: math.pow(x,1/8))})
+angry.update({"note":read_from("angry")})
 
 disgusted = {
     'name': 'disgusted',
@@ -72,7 +90,7 @@ disgusted = {
     'track': 1,
     'tempo': 250
 }
-disgusted.update({"note":markov2(disgusted['file'],disgusted['track'],lambda x: math.pow(x,1/8))})
+disgusted.update({"note":read_from("happy")})
 
 neutral = {
     'name': 'neutral',
@@ -80,7 +98,7 @@ neutral = {
     'track': 1,
     'tempo': 250
 }
-neutral.update({"note":markov2(neutral['file'],neutral['track'],lambda x: math.pow(x,1/8))})
+neutral.update({"note":read_from("happy")})
 
 surprised = {
     'name': 'surprised',
@@ -88,7 +106,7 @@ surprised = {
     'track': 1,
     'tempo': 250
 }
-surprised.update({"note":markov2(surprised['file'],surprised['track'],lambda x: math.pow(x,1/8))})
+surprised.update({"note":read_from("happy")})
 
 
 emotions = [happy, sad, angry, disgusted, neutral, surprised]
@@ -124,7 +142,7 @@ def play(markov_chain, note_duration, length, emotion_name):
             return
 
 
-last_emotion = "sad"
+last_emotion = "happy"
 
 
 def emotion_changed():
